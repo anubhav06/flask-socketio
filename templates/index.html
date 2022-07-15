@@ -1,0 +1,67 @@
+<html>
+<head>
+<title>Chat Room</title>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.0/socket.io.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+	
+// Get the username value from backend
+var username = '{{ data }}';
+
+$(document).ready(function() {
+	
+	var socket = io.connect('http://127.0.0.1:5000');
+
+	socket.on('connect', function(connectData) {
+		var connectData =
+		{
+			'msg': 'user has connected!',
+			'username': username
+		};
+		socket.send(connectData);
+		console.log('connectData: ', connectData)
+	});
+
+	// socket.on('connect', function () {
+	// 	socket.emit('my event', { msg: 'I\'m connected!' });
+	// });
+
+	// socket.on('message', function () {
+	// 	socket.emit('message', data= 'I\'m connected!' );
+	// });
+
+	socket.on('message', function(data) {
+		$("#messages").append('<li>'+ '<strong>' + data.username + ': </strong>' + data.msg +'</li>');
+		console.log('Received message', data);
+	});
+
+	$('#sendbutton').on('click', function() {
+		var data = 
+		{
+			'msg' :	$('#myMessage').val(),
+			'username' : username
+		};
+		socket.send(data);
+		$('#myMessage').val('');
+	});
+	
+
+});
+
+
+</script>
+
+{% if session["name"] %}
+	<h1> You are logged in as {{session["name"]}} </h1>
+{% else %}
+	<h1> You are not logged in! </h1>
+{% endif %}
+
+<ul id="messages"></ul>
+<input type="text" id="myMessage">
+<button id="sendbutton">Send</button>
+</body>
+
+</html>
