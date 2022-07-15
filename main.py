@@ -17,11 +17,10 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = config('SECRET_KEY')
 app.config['SESSION_PERMANENT'] = False
 app.config['SESSION_TYPE'] = "filesystem"
+app.config['SESSION_FILE_DIR']='/tmp'
 Session(app)
 
 socketio = SocketIO(app, cors_allowed_origins='*')
-
-REGISTRANTS = {}
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -85,8 +84,8 @@ def index():
 
 @socketio.on('message')
 def handle_message(data):
-    print('user', session['name'])
-    print('msg ', data)
+    # print('user', session['name'])
+    # print('msg ', data)
     send(data, broadcast=True)
 
 
