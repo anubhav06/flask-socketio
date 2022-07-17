@@ -9,7 +9,7 @@ This is mentioned in their [documentation](https://docs.deta.sh/docs/micros/abou
 
 ## Installation
 
-1. Run `pip install requirements.txt` to install the dependencies  
+1. Run `pip install -r requirements.txt` to install the dependencies  
 2. Run `python main.py` to start the server
 
 ## Steps to test out
